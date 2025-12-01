@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging-compat.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-size: cover;
+        }
+
+        .auth-card {
+            background: rgba(135, 206, 250, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            width: 350px;
+        }
+
+        .auth-card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1e3a8a;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            color: #0f172a;
+        }
+
+        .form-group input {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #3b82f6;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #02c647;
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2563eb;
+        }
+
+        .auth-footer {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .auth-footer a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-card">
+        <h2>Đăng Nhập</h2>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Tên đăng nhập</label>
+                <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
+            </div>
+
+            <button type="submit" class="btn">Đăng Nhập</button>
+        </form>
+
+        <div class="auth-footer">
+            Chưa có tài khoản? <a style="color: blue;" href="register.html">Đăng ký</a>
+        </div>
+    </div>
+    <script src="callApi.js"></script>
+    <script>
+        // 🔥 Lấy FCM token
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker
+                .register("firebase-messaging-sw.js")
+                .then((reg) => {
+                    console.log("Service Worker registered:", reg);
+                })
+                .catch((err) => {
+                    console.error("Service Worker registration failed:", err);
+                });
+        }
+
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyC3dPh2_ukDrU2NWwRtrJ8llRM4MchktY0",
+            authDomain: "safegate-network.firebaseapp.com",
+            projectId: "safegate-network",
+            storageBucket: "safegate-network.firebasestorage.app",
+            messagingSenderId: "915726319235",
+            appId: "1:915726319235:web:5fb6c38c8a8256fb20e5b6",
+            measurementId: "G-TQ6691JSGX"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+        Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+                getToken();
+            }
+        });
+        async function getToken() {
+            try {
+                const token = await messaging.getToken({
+                    vapidKey:
+                        "BJK-brhkLA9vOEvXXvhpamTfWuqxFAmBgqJzk0_AZYXnFhiuG5ZbZSXArIOGyBDPsUWcgbz2LGZcMuB8oAKYkdo",
+                });
+                localStorage.setItem("fcm_token", token);
+                console.log("FCM Token:", token);
+            } catch (err) {
+                console.error("Lỗi khi lấy token:", err);
+            }
+        }
+        // Lắng nghe khi đang foreground
+        messaging.onMessage((payload) => {
+            console.log("Tin nhắn foreground:", payload);
+            const { message, subject } = payload.data;
+            new Notification(subject, { message });
+        });
+        // 🔥 Gửi login API
+        document.getElementById("loginForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const data = {
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+                fcm_token: localStorage.getItem("fcm_token")
+            };
+
+            const result = await loginUser(data);
+
+            if (result.success) {
+                // Lưu token + tên người dùng
+                localStorage.setItem("token", result.data.accessToken);
+                localStorage.setItem("fullName", result.data.fullName);
+                localStorage.setItem("userId", result.data.userId);
+
+                // 👉 Tự động chuyển trang
+                window.location.href = "index.html";
+            } else {
+                // 👉 Xử lý lỗi sai tài khoản/mật khẩu
+                if (result.message.includes("Bad credentials")) {
+                    alert("Sai tên đăng nhập hoặc mật khẩu!");
+                } else {
+                    alert("Lỗi đăng nhập: " + result.message);
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

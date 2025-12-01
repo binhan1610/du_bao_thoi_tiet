@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)http://127.0.0.1:5500/index.html -->
+<html lang="vi"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Giám Sát</title>
+    
+    <link rel="stylesheet" href="./Dashboard Giám Sát_files/main.css">
+    
+    <link href="./Dashboard Giám Sát_files/boxicons.min.css" rel="stylesheet">
+    
+    <script src="./Dashboard Giám Sát_files/chart.js.download"></script>
+
+    <style>
+        .stat-card {
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card.chart-active {
+            box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="sidebar">
+        <h2>ĐỒ ÁN</h2>
+        <ul>
+            <li id="nav-giam-sat" class="active"><i class="bx bxs-dashboard"></i> Giám Sát</li>
+            <li id="nav-bao-cao" class=""><i class="bx bxs-report"></i> Báo Cáo</li>
+            <li class=""><i class="bx bxs-bell"></i> Cảnh Báo</li>
+            <li><i class="bx bx-map"></i> Dự đoán</li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+
+        <div id="giam-sat-content" class="page-content">
+            <h1>Giám Sát</h1>
+            <div class="dashboard-grid">
+                <div class="card chart-card">
+                    <canvas id="temperatureChart" width="1522" height="250" style="display: block; box-sizing: border-box; height: 250px; width: 1522px;"></canvas>
+                </div>
+                
+                <div class="card stat-card green">
+                    <i class="bx bxs-thermometer icon"></i>
+                    <div class="value">27°C</div>
+                    <div class="label">Nhiệt độ</div>
+                </div>
+                <div class="card stat-card blue">
+                    <i class="bx bxs-droplet-half icon"></i>
+                    <div class="value">71.5%</div>
+                    <div class="label">Độ ẩm</div>
+                </div>
+                <div class="card stat-card red chart-active">
+                    <i class="bx bxs-flask icon"></i>
+                    <div class="value">90%</div>
+                    <div class="label">Nồng độ C02</div>
+                </div>
+                <div class="card stat-card purple">
+                    <i class="bx bxs-cloud icon"></i>
+                    <div class="value">45 g/m³</div>
+                    <div class="label">Nồng độ bụi mịn</div>
+                </div>
+                <div class="card stat-card yellow">
+                    <i class="bx bx-wind icon"></i>
+                    <div class="value">3.2 m/s</div>
+                    <div class="label">Tốc độ gió</div>
+                </div>
+
+            </div>
+            <div class="card data-table-card">
+                <div class="card-header">
+                    <div>
+                        <h3>Bảng thống kê dữ liệu</h3>
+                        <p>Hiển thị 20 dữ liệu gần đây nhất</p>
+                    </div>
+                    <i class="bx bx-cog"></i>
+                </div>
+                <div class="card-body">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Thời gian</th>
+                                <th>Nhiệt độ (°C)</th>
+                                <th>Độ ẩm (%)</th>
+                                <th>Nồng độ CO₂ (%)</th>
+                                <th>Bụi mịn (g/m³)</th>
+                                <th>Tốc độ gió (m/s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2021-01-18 11:26:43</td>
+                                <td>27</td>
+                                <td>71.5</td>
+                                <td>97.5</td>
+                                <td>45</td>
+                                <td>3.2</td>
+                            </tr>
+                            <tr>
+                                <td>2021-01-18 11:26:38</td>
+                                <td>26.5</td>
+                                <td>74.0</td>
+                                <td>95.0</td>
+                                <td>47</td>
+                                <td>2.8</td>
+                            </tr>
+                            <tr>
+                                <td>2021-01-18 11:26:33</td>
+                                <td>27.2</td>
+                                <td>70.5</td>
+                                <td>92.0</td>
+                                <td>50</td>
+                                <td>3.5</td>
+                            </tr>
+                            <tr>
+                                <td>2021-01-18 11:26:28</td>
+                                <td>26.8</td>
+                                <td>73.2</td>
+                                <td>93.5</td>
+                                <td>48</td>
+                                <td>3.0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="bao-cao-content" class="page-content page-hidden">
+             <div class="report-header">
+&nbsp; &nbsp; &nbsp; &nbsp; <div class="title">» Báo cáo</div>
+&nbsp; &nbsp; &nbsp; &nbsp; <div class="actions">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <div class="search-box">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <i class="bx bx-search"></i>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <input type="text" placeholder="Tìm kiếm...">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <i class="bx bx-cog" style="font-size: 24px; cursor: pointer;"></i>
+&nbsp; &nbsp; &nbsp; &nbsp; </div>
+&nbsp; &nbsp; </div>
+
+&nbsp; &nbsp; <div class="main-actions">
+&nbsp; &nbsp; &nbsp; &nbsp; <div class="export-buttons">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <button class="btn-excel">EXCEL</button>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <button class="btn-csv">CSV</button>
+&nbsp; &nbsp; &nbsp; &nbsp; </div>
+&nbsp; &nbsp; </div>
+
+&nbsp; &nbsp; <div class="card data-table-card">
+&nbsp; &nbsp; &nbsp; &nbsp; <div class="card-header">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <div>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <h3>Bảng thống kê dữ liệu</h3>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <p>Hiển thị 40 dữ liệu gần đây nhất</p>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <i class="bx bx-cog"></i>
+&nbsp; &nbsp; &nbsp; &nbsp; </div>
+
+&nbsp; &nbsp; &nbsp; &nbsp; <div class="card-body">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <table><thead><tr><th>Thời gian</th><th>Nhiệt độ (°C)</th><th>Độ ẩm (%)</th><th>Nồng độ CO₂ (%)</th><th>Bụi mịn (g/m³)</th><th>Tốc độ gió (m/s)</th></tr></thead><tbody><tr><td>2021-01-18 11:26:43</td><td>27</td><td>71.5</td><td>97.5</td><td>45</td><td>3.2</td></tr></tbody></table>
+&nbsp; &nbsp; &nbsp; &nbsp; </div>
+&nbsp; &nbsp; </div>
+        </div>
+
+        <div id="canh-bao-content" class="page-content page-hidden">
+            <h1>Cảnh Báo</h1>
+            <div class="status-summary">
+&nbsp; &nbsp; &nbsp; &nbsp; <div class="status-card normal">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <i class="bx bxs-thermometer"></i>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <div>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <h4>Nhiệt độ</h4>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <p>27°C</p>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span>🟢 Bình thường</span>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; _</div>
+&nbsp; &nbsp; &nbsp; &nbsp; </div>
+
+&nbsp; &nbsp; &nbsp; &nbsp; <div class="status-card normal">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <i class="bx bxs-droplet-half"></i>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <div>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <h4>Độ ẩm</h4>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <p>71.5%</p>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span>🟢 Bình thường</span>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div>
+&nbsp; &nbsp; &nbsp; &nbsp; </div>
+
+&nbsp; &nbsp; &nbsp; &nbsp; <div class="status-card danger">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <i class="bx bxs-flask"></i>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <div>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <h4>Nồng độ CO₂</h4>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <p>110%</p>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span>🔴 Cảnh báo mạnh</span>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </div>
+&nbsp; &nbsp; &nbsp; &nbsp; </div>
+
+ <div class="status-card warning">
+<i class="bx bxs-cloud"></i>
+<div>
+ <h4>Bụi mịn</h4>
+ <p>120 g/m³</p>
+ <span>🟠 Cảnh báo nhẹ</span>
+ </div>
+ </div>
+
+ <div class="status-card danger">
+<i class="bx bx-wind"></i>
+<div>
+<h4>Tốc độ gió</h4>
+<p>12 m/s</p>
+<span>🔴 Cảnh báo mạnh</span>
+</div>
+</div>
+</div>
+        </div>
+    </div>
+
+    <script>
+        // --- PHẦN 1: CÀI ĐẶT BIỂU ĐỒ VÀ CẬP NHẬT ---
+
+        let mainChart;
+        let ctx;
+
+        // Dữ liệu mẫu cho các biểu đồ
+        const chartLabels = ['23:25:42', '23:25:47', '23:25:52', '23:25:57', '23:26:02'];
+        
+        const chartData = {
+            temperature: {
+                label: 'Nhiệt độ (°C)',
+                data: [26, 27, 28.5, 28, 26],
+                borderColor: '#48bb78', // Green
+                baseColor: 'rgba(72, 187, 120, 0.6)'
+            },
+            humidity: {
+                label: 'Độ ẩm (%)',
+                data: [71.5, 72, 70, 71, 71.5],
+                borderColor: '#3b82f6', // Blue
+                baseColor: 'rgba(59, 130, 246, 0.6)'
+            },
+            co2: {
+                label: 'Nồng độ CO₂ (%)',
+                data: [90, 92, 95, 93, 91],
+                borderColor: '#ef4444', // Red
+                baseColor: 'rgba(239, 68, 68, 0.6)'
+            },
+            // === MỚI: Thêm dữ liệu Bụi mịn ===
+            dust: {
+                label: 'Nồng độ bụi mịn (g/m³)',
+                data: [45, 47, 50, 48, 46],
+                borderColor: '#a855f7', // Purple
+                baseColor: 'rgba(168, 85, 247, 0.6)'
+            },
+            // === MỚI: Thêm dữ liệu Tốc độ gió ===
+            wind: {
+                label: 'Tốc độ gió (m/s)',
+                data: [3.2, 2.8, 3.5, 3.0, 3.1],
+                borderColor: '#eab308', // Yellow
+                baseColor: 'rgba(234, 179, 8, 0.6)'
+            }
+        };
+
+        // Hàm trợ giúp để tạo màu gradient
+        function createChartGradient(baseColor) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, 200);
+            gradient.addColorStop(0, baseColor);
+            gradient.addColorStop(1, baseColor.replace('0.6', '0.1'));
+            return gradient;
+        }
+
+        /**
+         * Hàm cập nhật biểu đồ chính
+         * @param {object} data - Đối tượng dữ liệu (ví dụ: chartData.temperature)
+         * @param {HTMLElement} clickedCard - Thẻ stat-card vừa được click
+         */
+        function updateChart(data, clickedCard) {
+            const newGradient = createChartGradient(data.baseColor);
+            
+            mainChart.data.datasets[0].label = data.label;
+            mainChart.data.datasets[0].data = data.data;
+            mainChart.data.datasets[0].borderColor = data.borderColor;
+            mainChart.data.datasets[0].backgroundColor = newGradient;
+            mainChart.update();
+
+            // Cập nhật trạng thái 'active' của các thẻ
+            document.querySelectorAll('.stat-card').forEach(card => {
+                card.classList.remove('chart-active');
+            });
+            clickedCard.classList.add('chart-active');
+        }
+
+        // --- PHẦN 2: CHUYỂN TRANG VÀ KHỞI TẠO ---
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Khởi tạo biểu đồ (Chạy đầu tiên) ---
+            ctx = document.getElementById('temperatureChart').getContext('2d');
+            const initialData = chartData.temperature;
+            const initialGradient = createChartGradient(initialData.baseColor);
+            
+            mainChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: initialData.label,
+                        data: initialData.data,
+                        borderColor: initialData.borderColor,
+                        backgroundColor: initialGradient,
+                        borderWidth: 3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#fff',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        y: { beginAtZero: false, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#e2e8f0' } }, 
+                        x: { grid: { display: false }, ticks: { color: '#e2e8f0' } } 
+                    }, 
+                    plugins: { 
+                        legend: { labels: { color: '#e2e8f0' } }
+                    } 
+                }
+            });
+
+            // --- Thêm sự kiện click cho các thẻ (stat-card) ---
+            const cardTemp = document.querySelector('.stat-card.green');
+            const cardHumidity = document.querySelector('.stat-card.blue');
+            const cardCO2 = document.querySelector('.stat-card.red');
+            // === MỚI: Thêm bộ chọn thẻ Bụi mịn và Gió ===
+            const cardDust = document.querySelector('.stat-card.purple');
+            const cardWind = document.querySelector('.stat-card.yellow');
+
+            cardTemp.addEventListener('click', function() {
+                updateChart(chartData.temperature, this);
+            });
+            cardHumidity.addEventListener('click', function() {
+                updateChart(chartData.humidity, this);
+            });
+            cardCO2.addEventListener('click', function() {
+                updateChart(chartData.co2, this);
+            });
+            // === MỚI: Thêm sự kiện click cho Bụi mịn và Gió ===
+            cardDust.addEventListener('click', function() {
+                updateChart(chartData.dust, this);
+            });
+            cardWind.addEventListener('click', function() {
+                updateChart(chartData.wind, this);
+            });
+            
+            // --- Xử lý chuyển trang (Giữ nguyên) ---
+            const navGiamSat = document.getElementById('nav-giam-sat');
+            const navBaoCao = document.getElementById('nav-bao-cao');
+            const navCanhBao = document.querySelector('li i.bxs-bell').parentElement;
+
+            const contentGiamSat = document.getElementById('giam-sat-content');
+            const contentBaoCao = document.getElementById('bao-cao-content');
+            const contentCanhBao = document.getElementById('canh-bao-content');
+
+            function setActiveNav(activeNav) {
+                navGiamSat.classList.remove('active');
+                navBaoCao.classList.remove('active');
+                navCanhBao.classList.remove('active');
+                activeNav.classList.add('active');
+            }
+
+            navGiamSat.addEventListener('click', function() {
+                contentGiamSat.classList.remove('page-hidden');
+                contentBaoCao.classList.add('page-hidden');
+                contentCanhBao.classList.add('page-hidden');
+                setActiveNav(navGiamSat);
+            });
+
+            navBaoCao.addEventListener('click', function() {
+                contentBaoCao.classList.remove('page-hidden');
+                contentGiamSat.classList.add('page-hidden');
+                contentCanhBao.classList.add('page-hidden');
+                setActiveNav(navBaoCao);
+            });
+
+            navCanhBao.addEventListener('click', function() {
+                contentCanhBao.classList.remove('page-hidden');
+                contentGiamSat.classList.add('page-hidden');
+                contentBaoCao.classList.add('page-hidden');
+                setActiveNav(navCanhBao);
+            });
+        });
+
+    </script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+</body></html>
