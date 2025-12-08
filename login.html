@@ -16,7 +16,24 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            /* 🌄 Background đẹp */
+            background-image: url("https://qldt.ptit.edu.vn/assets/images/AQ1.png");
             background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            /* lớp phủ nhẹ để auth-card nổi bật */
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            /* chỉnh độ tối nền */
+            backdrop-filter: blur(2px);
+            z-index: 0;
         }
 
         .auth-card {
@@ -84,11 +101,32 @@
             color: #3b82f6;
             text-decoration: none;
         }
+
+        .auth-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .auth-logo img {
+            width: 150px;
+            /* kích thước logo */
+            height: 100%;
+            border-radius: 8px;
+            /* bo nhẹ cho đẹp */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
     </style>
 </head>
 
 <body>
     <div class="auth-card">
+
+        <!-- Logo PTIT -->
+        <div class="auth-logo">
+            <img src="https://ptit.edu.vn/wp-content/uploads/2024/08/logo-PTIT-826x1024.jpg" alt="PTIT Logo">
+        </div>
+
         <h2>Đăng Nhập</h2>
 
         <form id="loginForm">

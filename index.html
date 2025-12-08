@@ -13,6 +13,45 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        #log-container {
+            height: 600px;
+            /* tuỳ bạn chỉnh */
+            overflow-y: auto;
+            font-family: monospace;
+            background: #111;
+            color: #eee;
+            padding: 8px 12px;
+        }
+
+        .table-pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 0;
+            gap: 20px;
+        }
+
+        .btn-page {
+            background: #e9ecef;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-page:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .log-line {
+            white-space: pre-wrap;
+            border-bottom: 1px solid #333;
+            padding: 4px 0;
+            font-size: 13px;
+        }
+
         /* === HAMBURGER MENU === */
         .hamburger-btn {
             position: fixed;
@@ -650,8 +689,6 @@
                     bị</li>
                 <li id="nav-bao-cao"><i class='bx bxs-report'></i> Báo
                     Cáo</li>
-                <li id="nav-canh-bao"><i class='bx bxs-bell'></i> Cảnh
-                    Báo</li>
                 <li id="nav-du-doan"><i class='bx bx-map'></i> Nhật ký</li>
                 <li id="nav-dang-nhap" onclick="logout()">
                     <i class='bx bxs-log-in'></i> Đăng Xuất
@@ -661,18 +698,19 @@
 
         <div id="sidebar-widget" class="sidebar-widget">
             <div class="weather-widget">
-                <div class="location">Nam Định</div>
-                <div class="time">12:30</div>
+                <div class="location"></div>
+                <div class="time">--:--</div>
                 <div class="weather-icon">
                     <i class='bx bxs-sun'></i>
                 </div>
-                <div class="temperature">27°C</div>
+                <div class="temperature">--°C</div>
                 <div class="weather-details">
-                    <span>Mây: 20%</span> |
-                    <span>Nắng: 80%</span>
+                    <span class="clouds">Mây: --%</span> |
+                    <span class="sun">Nắng: --%</span>
                 </div>
             </div>
         </div>
+
 
         <div class="main-content" id="main-content">
 
@@ -724,10 +762,7 @@
             </div>
 
             <div id="thiet-bi-content" class="page-content page-hidden">
-                <div class="card_header">
-                    <h1>Quản lý Thiết bị</h1>
-                </div>
-
+                <h1>Quản lý Thiết bị</h1>
                 <div class="section common_infors">
                     <div class="card_section">
                         <div class="info-section">
@@ -774,37 +809,34 @@
                             <h2 class="sub-title">
                                 Hệ thống
                             </h2>
+
                             <div class="row-info">
-                                <label>
-                                    CPU:
-                                </label>
+                                <label>CPU:</label>
                                 <div class="progress-bar-container">
                                     <div class="progress-bar">
                                         <div class="progress-bar-value" id="cpu_progress_bar"></div>
                                     </div>
-                                    <span>80%</span>
+                                    <span id="cpu_percent">0%</span>
                                 </div>
                             </div>
+
                             <div class="row-info">
-                                <label>
-                                    Bộ nhớ:
-                                </label>
+                                <label>Bộ nhớ:</label>
                                 <div class="progress-bar-container">
                                     <div class="progress-bar">
                                         <div class="progress-bar-value" id="memory_progress_bar"></div>
                                     </div>
-                                    <span>50%</span>
+                                    <span id="memory_percent">0%</span>
                                 </div>
                             </div>
+
                             <div class="row-info">
-                                <label>
-                                    Ổ đĩa:
-                                </label>
+                                <label>Ổ đĩa:</label>
                                 <div class="progress-bar-container">
                                     <div class="progress-bar">
                                         <div class="progress-bar-value" id="disk_progress_bar"></div>
                                     </div>
-                                    <span>10%</span>
+                                    <span id="disk_percent">0%</span>
                                 </div>
                             </div>
                         </div>
@@ -882,8 +914,8 @@
 
                 <div class="report-actions">
                     <div class="export-buttons">
-                        <button class="btn-excel">EXCEL</button>
-                        <button class="btn-csv">CSV</button>
+                        <button id="btn_export_csv" class="btn-excel">EXCEL</button>
+                        <button id="btn_export_csv" class="btn-csv">CSV</button>
                     </div>
                     <div class="search-box">
                         <i class='bx bx-search'></i>
@@ -912,113 +944,29 @@
                                     <th>Cường độ UV</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>2021-01-18 11:26:43</td>
-                                    <td>27</td>
-                                    <td>71.5</td>
-                                    <td>97.5</td>
-                                    <td>45</td>
-                                    <td>3.2</td>
-                                    <td>4</td>
-                                </tr>
-                                <tr>
-                                    <td>2021-01-18 11:26:38</td>
-                                    <td>26.5</td>
-                                    <td>74.0</td>
-                                    <td>95.0</td>
-                                    <td>47</td>
-                                    <td>2.8</td>
-                                    <td>3</td>
-                                </tr>
+                            <tbody id="sensor_table_body">
+                                <!-- JS sẽ fill dữ liệu vào đây -->
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-
-            <div id="canh-bao-content" class="page-content page-hidden">
-                <h1>Cảnh Báo</h1>
-
-                <div class="legend-summary">
-                    <div class="legend-item">
-                        <div class="legend-color normal"></div>
-                        <span>Bình thường</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color warning"></div>
-                        <span>Cảnh báo nhẹ</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color danger"></div>
-                        <span>Cảnh báo mạnh</span>
-                    </div>
-                </div>
-
-                <div class="status-summary">
-                    <div class="card status-card normal">
-                        <i class='bx bxs-thermometer'></i>
-                        <div>
-                            <h4>Nhiệt độ</h4>
-                            <p>27°C</p>
-                            <span class="text-normal">🟢</span>
-                        </div>
-                    </div>
-
-                    <div class="card status-card normal">
-                        <i class='bx bxs-droplet-half'></i>
-                        <div>
-                            <h4>Độ ẩm</h4>
-                            <p>71.5%</p>
-                            <span class="text-normal">🟢</span>
-                        </div>
-                    </div>
-
-                    <div class="card status-card danger">
-                        <i class='bx bxs-flask'></i>
-                        <div>
-                            <h4>Nồng độ CO₂</h4>
-                            <p>110%</p>
-                            <span class="text-danger">🔴</span>
-                        </div>
-                    </div>
-
-                    <div class="card status-card warning">
-                        <i class='bx bxs-cloud'></i>
-                        <div>
-                            <h4>Bụi mịn</h4>
-                            <p>120 g/m³</p>
-                            <span class="text-warning">🟠</span>
-                        </div>
-                    </div>
-
-                    <div class="card status-card danger">
-                        <i class='bx bx-wind'></i>
-                        <div>
-                            <h4>Tốc độ gió</h4>
-                            <p>12 m/s</p>
-                            <span class="text-danger">🔴</span>
-                        </div>
-                    </div>
-
-                    <div class="card status-card normal">
-                        <i class='bx bxs-sun'></i>
-                        <div>
-                            <h4>Cường độ UV</h4>
-                            <p>4</p>
-                            <span class="text-normal">🟢</span>
+                        <div class="table-pagination">
+                            <button class="btn-page" id="sensor_prev_page"><i class='bx bx-chevron-left'></i>
+                                Trước</button>
+                            <span id="sensor_page_info">Trang 1</span>
+                            <button class="btn-page" id="sensor_next_page">Sau <i
+                                    class='bx bx-chevron-right'></i></button>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <div id="du-doan-content" class="page-content page-hidden">
-                <h1>Dự đoán</h1>
-                <div class="card">
-                    <p>Nội dung và chức năng dự đoán đã được chuyển sang
-                        trang "Giám Sát" để dễ theo dõi hơn.</p>
+                <h1>Nhật Ký</h1>
+                <div class="card" id="log-container">
+                    <!-- log sẽ được append vào đây -->
                 </div>
             </div>
+
         </div>
     </div>
     <script src="callApi.js"></script>
@@ -1113,7 +1061,6 @@
                 giamSat: document.getElementById('nav-giam-sat'),
                 thietBi: document.getElementById('nav-thiet-bi'),
                 baoCao: document.getElementById('nav-bao-cao'),
-                canhBao: document.getElementById('nav-canh-bao'),
                 duDoan: document.getElementById('nav-du-doan')
             };
 
@@ -1121,7 +1068,6 @@
                 giamSat: document.getElementById('giam-sat-content'),
                 thietBi: document.getElementById('thiet-bi-content'),
                 baoCao: document.getElementById('bao-cao-content'),
-                canhBao: document.getElementById('canh-bao-content'),
                 duDoan: document.getElementById('du-doan-content')
             };
 
@@ -1140,7 +1086,6 @@
             navItems.giamSat.addEventListener('click', () => showPage('giamSat'));
             navItems.thietBi.addEventListener('click', () => showPage('thietBi'));
             navItems.baoCao.addEventListener('click', () => showPage('baoCao'));
-            navItems.canhBao.addEventListener('click', () => showPage('canhBao'));
             navItems.duDoan.addEventListener('click', () => showPage('duDoan'));
 
             showPage('giamSat');
@@ -1247,26 +1192,7 @@
 
         });
 
-        // === Thiết bị ===
-        function updateProgress(barId, value) {
-            const bar = document.getElementById(barId);
-            bar.style.backgroundColor = '#0095FF';
-            bar.style.width = '0%';
 
-            setTimeout(() => {
-                bar.style.width = value + '%';
-
-                if (value < 50)
-                    bar.style.backgroundColor = '#0095FF';
-                else if (value < 80)
-                    bar.style.backgroundColor = '#FFD740';
-                else
-                    bar.style.backgroundColor = '#FF0000';
-            }, 50);
-        }
-        updateProgress('cpu_progress_bar', 80);
-        updateProgress('memory_progress_bar', 50);
-        updateProgress('disk_progress_bar', 10);
         // log out
         function logout() {
             localStorage.removeItem('token'); // Xóa token

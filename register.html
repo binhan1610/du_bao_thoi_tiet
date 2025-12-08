@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,30 +14,52 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            /* 🌄 Background đẹp */
+            background-image: url("https://qldt.ptit.edu.vn/assets/images/AQ1.png");
             background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            /* lớp phủ nhẹ để auth-card nổi bật */
+            position: relative;
         }
+
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            /* chỉnh độ tối nền */
+            backdrop-filter: blur(2px);
+            z-index: 0;
+        }
+
         .auth-card {
             background: rgba(135, 206, 250, 0.2);
             backdrop-filter: blur(10px);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             width: 350px;
         }
+
         .auth-card h2 {
             text-align: center;
             margin-bottom: 20px;
             color: #1e3a8a;
         }
+
         .form-group {
             display: flex;
             flex-direction: column;
             margin-bottom: 15px;
         }
+
         .form-group label {
             margin-bottom: 5px;
             color: #0f172a;
         }
+
         .form-group input {
             padding: 10px;
             border-radius: 8px;
@@ -45,9 +68,11 @@
             outline: none;
             transition: border-color 0.3s;
         }
+
         .form-group input:focus {
             border-color: #3b82f6;
         }
+
         .btn {
             width: 100%;
             padding: 10px;
@@ -59,81 +84,106 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
+
         .btn:hover {
             background-color: #2563eb;
         }
+
         .auth-footer {
             margin-top: 15px;
             text-align: center;
             font-size: 14px;
         }
+
         .auth-footer a {
             color: #07a747;
             text-decoration: none;
         }
+
         .auth-footer a:hover {
             text-decoration: underline;
         }
+
+        .auth-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .auth-logo img {
+            width: 100px;
+
+            /* kích thước logo */
+            height: auto;
+            border-radius: 8px;
+            /* bo nhẹ cho đẹp */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        }
     </style>
 </head>
+
 <body>
-<div class="auth-card">
-    <h2>Đăng Ký</h2>
-    <form id="registerForm">
-        <div class="form-group">
-            <label for="username">Tên đăng nhập</label>
-            <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
+    <div class="auth-card">
+        <div class="auth-logo">
+            <img src="https://ptit.edu.vn/wp-content/uploads/2024/08/logo-PTIT-826x1024.jpg" alt="PTIT Logo">
         </div>
-        <div class="form-group">
-            <label for="firstName">Họ</label>
-            <input type="text" id="firstName" name="firstName" placeholder="VD: Dang Binh" required>
-        </div>
-        <div class="form-group">
-            <label for="lastName">Tên</label>
-            <input type="text" id="lastName" name="lastName" placeholder="VD: An" required>
-        </div>
-        <div class="form-group">
-            <label for="sex">Giới tính</label>
-            <input type="text" id="sex" name="sex" placeholder="Male / Female" required>
-        </div>
-        <div class="form-group">
-            <label for="birthDay">Ngày sinh</label>
-            <input type="date" id="birthDay" name="birthDay" required>
-        </div>
-        <div class="form-group">
-            <label for="password">Mật khẩu</label>
-            <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
-        </div>
-        <button type="submit" class="btn">Đăng Ký</button>
-    </form>
+        <h2>Đăng Ký</h2>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="username">Tên đăng nhập</label>
+                <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
+            </div>
+            <div class="form-group">
+                <label for="firstName">Họ</label>
+                <input type="text" id="firstName" name="firstName" placeholder="VD: Dang Binh" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Tên</label>
+                <input type="text" id="lastName" name="lastName" placeholder="VD: An" required>
+            </div>
+            <div class="form-group">
+                <label for="sex">Giới tính</label>
+                <input type="text" id="sex" name="sex" placeholder="Male / Female" required>
+            </div>
+            <div class="form-group">
+                <label for="birthDay">Ngày sinh</label>
+                <input type="date" id="birthDay" name="birthDay" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
+            </div>
+            <button type="submit" class="btn">Đăng Ký</button>
+        </form>
 
-    <div class="auth-footer">
-        Đã có tài khoản? <a style="color: blue;" href="login.html">Đăng Nhập</a>
+        <div class="auth-footer">
+            Đã có tài khoản? <a style="color: blue;" href="login.html">Đăng Nhập</a>
+        </div>
     </div>
-</div>
 
-<script src="callApi.js"></script>
-<script>
-    document.getElementById("registerForm").addEventListener("submit", async function (e) {
-        e.preventDefault();
+    <script src="callApi.js"></script>
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
 
-        const data = {
-            username: document.getElementById("username").value,
-            password: document.getElementById("password").value,
-            firstName: document.getElementById("firstName").value,
-            lastName: document.getElementById("lastName").value,
-            sex: document.getElementById("sex").value,
-            birthDay: document.getElementById("birthDay").value
-        };
-        const result = await registerUser(data);
+            const data = {
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+                firstName: document.getElementById("firstName").value,
+                lastName: document.getElementById("lastName").value,
+                sex: document.getElementById("sex").value,
+                birthDay: document.getElementById("birthDay").value
+            };
+            const result = await registerUser(data);
 
-        if (result.success && result.message.includes("User registered successfully")) {
-            alert("Đăng ký thành công!");
-            window.location.href = "login.html";
-        } else {
-            alert("Lỗi: " + result.message);
-        }
-    });
-</script>
+            if (result.success && result.message.includes("User registered successfully")) {
+                alert("Đăng ký thành công!");
+                window.location.href = "login.html";
+            } else {
+                alert("Lỗi: " + result.message);
+            }
+        });
+    </script>
 </body>
+
 </html>
