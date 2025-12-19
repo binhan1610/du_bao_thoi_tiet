@@ -21,23 +21,18 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-
-            /* lớp phủ nhẹ để auth-card nổi bật */
-            position: relative;
         }
 
         body::before {
-            content: "";
-            position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.35);
+            background: white(0, 0, 0, 0.35);
             /* chỉnh độ tối nền */
             backdrop-filter: blur(2px);
             z-index: 0;
         }
 
         .auth-card {
-            background: rgba(135, 206, 250, 0.2);
+            background: white;
             backdrop-filter: blur(10px);
             padding: 30px;
             border-radius: 15px;
@@ -163,13 +158,13 @@
 
         // Firebase config
         const firebaseConfig = {
-            apiKey: "AIzaSyC3dPh2_ukDrU2NWwRtrJ8llRM4MchktY0",
-            authDomain: "safegate-network.firebaseapp.com",
-            projectId: "safegate-network",
-            storageBucket: "safegate-network.firebasestorage.app",
-            messagingSenderId: "915726319235",
-            appId: "1:915726319235:web:5fb6c38c8a8256fb20e5b6",
-            measurementId: "G-TQ6691JSGX"
+            apiKey: "AIzaSyDKLDWGtFABeQUZGSgvAPthc-5kXPox21I",
+            authDomain: "storage-image-80802.firebaseapp.com",
+            projectId: "storage-image-80802",
+            storageBucket: "storage-image-80802.appspot.com",
+            messagingSenderId: "1003874933380",
+            appId: "1:1003874933380:web:d1503d83f5df09888f80d1",
+            measurementId: "G-XXTE0XSGPV"
         };
         firebase.initializeApp(firebaseConfig);
         const messaging = firebase.messaging();
@@ -182,7 +177,7 @@
             try {
                 const token = await messaging.getToken({
                     vapidKey:
-                        "BJK-brhkLA9vOEvXXvhpamTfWuqxFAmBgqJzk0_AZYXnFhiuG5ZbZSXArIOGyBDPsUWcgbz2LGZcMuB8oAKYkdo",
+                        "BBfz79ZsbuR88P1Et_i8vLZrX0XWysxyTzDGn2Ioc2LSQIXRk79gyq4_NaXaAjlevR6zp27X1VHJ8rvH2n-T53s",
                 });
                 localStorage.setItem("fcm_token", token);
                 console.log("FCM Token:", token);

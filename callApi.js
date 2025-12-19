@@ -567,20 +567,45 @@ loadSystemInfo();
 
 setInterval(updateTime, 1000);
 // Cập nhật mỗi 60 giây 
-setInterval(loadSystemInfo, 60 * 1000);
-// 10 phút 1 lần:
-setInterval(loadWeather, 10 * 60 * 1000);
-// Cập nhật mỗi 60s
-setInterval(updateDashboard, 60 * 1000);
-// Cập nhật mỗi 120s
-setInterval(() => {
+
+const socket = io("http://localhost:9094");
+socket.on("connect", () => {
+    console.log("Đã kết nối SocketIO với ID:", socket.id);
+});
+
+socket.on("/doan/air_quality/realtime_display", (data) => {
+    console.log("Nhận tin Realtime:", data);
+    updateDashboard(); 
+});
+
+socket.on("/doan/air_quality/prediction_24h", (data) => {
+    console.log("Nhận tin Prediction:", data);
+    loadWeather();
+});
+
+socket.on("/doan/air_quality/system_info", (data) => {
+    console.log("Nhận tin System Info:", data);
+    loadSystemInfo();
+});
+
+socket.on("/doan/air_quality/log", (data) => {
+    console.log("Nhận tin Log mới:", data);
+    
     logOffset = 0;
     logHasMore = true;
 
     const container = document.getElementById('log-container');
     if (container) {
-        container.innerHTML = "";
+        container.innerHTML = ""; 
     }
+    
     loadLogs(true);
+});
 
-}, 2 * 60 * 1000); 
+socket.on("/doan/air_quality/debug_sub", (data) => {
+    console.log("Debug Info:", data);
+});
+
+socket.on("connect_error", (err) => {
+    console.error("Lỗi kết nối Socket:", err);
+});
