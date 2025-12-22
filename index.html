@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="css/boxicons.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
     <style>
@@ -972,6 +973,27 @@
     <script src="callApi.js"></script>
 
     <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDKLDWGtFABeQUZGSgvAPthc-5kXPox21I",
+            authDomain: "storage-image-80802.firebaseapp.com",
+            projectId: "storage-image-80802",
+            storageBucket: "storage-image-80802.appspot.com",
+            messagingSenderId: "1003874933380",
+            appId: "1:1003874933380:web:d1503d83f5df09888f80d1",
+            measurementId: "G-XXTE0XSGPV"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        messaging.onMessage((payload) => {
+            console.log("Tin nhắn foreground:", payload);
+            const { message, subject } = payload.data;
+            new Notification(subject, {
+                body: `\n${message}`,  // Key bắt buộc phải là 'body' để hiện nội dung
+                icon: '/an.jpg',
+            });
+        });
         // --- PHẦN 1: HÀM TRỢ GIÚP VÀ DỮ LIỆU ---
 
         function createChartGradient(context, baseColor) {

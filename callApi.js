@@ -568,7 +568,7 @@ loadSystemInfo();
 setInterval(updateTime, 1000);
 // Cập nhật mỗi 60 giây 
 
-const socket = io("http://localhost:9094");
+const socket = io("http://localhost:9096");
 socket.on("connect", () => {
     console.log("Đã kết nối SocketIO với ID:", socket.id);
 });
